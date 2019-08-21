@@ -35,6 +35,22 @@ DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES=./libsnmallocshim.dylib bash
 
 しかし，README.mdの記述としては，macOSでも動作するような記述あり
 
+Ubuntu16.04のdefaultのcmakeのversion(3.5.1)では下記のエラーが出現する
+```
+CMake 3.8 or higher is required.  You are running version 3.5.1
+```
+
+回避方法として，[Releases · Kitware/CMake]( https://github.com/Kitware/CMake/releases )から該当するversionのcmakeのバイナリをダウンロードして使用する
+```
+wget https://github.com/Kitware/CMake/releases/download/v3.15.2/cmake-3.15.2-Linux-x86_64.tar.gz
+tar xvf cmake-3.15.2-Linux-x86_64.tar.gz
+
+./cmake-3.15.2-Linux-x86_64/bin/cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Release
+ninja
+```
+
+しかし，ビルド時にパースエラーとなった
+
 ### links
 * [論文「snmalloc: A Message Passing Allocator」\(ISMM 2019\)]( https://nhiroki.jp/2019/07/08/paper-snmalloc-a-message-passing-allocator )
 
@@ -65,7 +81,8 @@ DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES=./libmesh.dylib bash
 ### NOTE
 > Mesh runs on Linux; macOS support should be considered alpha-quality, and Windows is a work-in-progress.
 
-macOSにおいて，`sigaction`や`pthread_create`あたりでビルドエラーが出現する
+* macOSにおいて，`sigaction`や`pthread_create`あたりでビルドエラーが出現する
+* Ubuntu16.04において， `pthread`でビルドエラー
 
 ### links
 * [論文「MESH: Compacting Memory Management for C/C\+\+ Applications」\(PLDI 2019\)]( https://nhiroki.jp/2019/02/26/paper-mesh-compacting-memory-management )
@@ -104,6 +121,8 @@ DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES=./libmimalloc.dylib bash
 ```
 
 しかし，README.mdの記述としては，macOSでも動作するような記述あり
+
+* Ubuntu16.04にて，ビルドと動作ともにOK
 
 ### links
 * [Microsoft、高性能メモリアロケータ「mimalloc」公開 \| マイナビニュース]( https://news.mynavi.jp/article/20190625-847906/ )
